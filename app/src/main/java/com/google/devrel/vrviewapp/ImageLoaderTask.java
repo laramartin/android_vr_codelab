@@ -49,4 +49,12 @@ public class ImageLoaderTask extends AsyncTask<AssetManager, Void, Bitmap> {
         this.viewOptions = viewOptions;
         this.assetName = assetName;
     }
+
+    @Override
+    protected void onPostExecute(Bitmap bitmap) {
+        final VrPanoramaView vw = viewReference.get();
+        if (vw != null && bitmap != null) {
+            vw.loadImageFromBitmap(bitmap, viewOptions);
+        }
+    }
 }
