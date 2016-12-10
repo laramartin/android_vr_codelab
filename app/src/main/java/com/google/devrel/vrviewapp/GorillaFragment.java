@@ -186,5 +186,30 @@ public class GorillaFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Prevent the view from rendering continuously when in the background.
+        videoWidgetView.pauseRendering();
+        // If the video was playing when onPause() is called, the default behavior will be to pause
+        // the video and keep it paused when onResume() is called.
+        isPaused = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Resume the 3D rendering.
+        videoWidgetView.resumeRendering();
+        // Update the text to account for the paused video in onPause().
+        updateStatusText();
+    }
+
+    @Override
+    public void onDestroy() {
+        // Destroy the widget and free memory.
+        videoWidgetView.shutdown();
+        super.onDestroy();
+    }
 
 }
