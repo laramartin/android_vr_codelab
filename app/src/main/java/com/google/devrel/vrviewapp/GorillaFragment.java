@@ -28,6 +28,8 @@ import android.widget.Toast;
 import com.google.vr.sdk.widgets.video.VrVideoEventListener;
 import com.google.vr.sdk.widgets.video.VrVideoView;
 
+import java.util.Locale;
+
 /**
  * Fragment for the Gorilla tab.
  */
@@ -150,5 +152,14 @@ public class GorillaFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void updateStatusText() {
+        String status = (isPaused ? "Paused: " : "Playing: ") +
+                String.format(Locale.getDefault(), "%.2f", videoWidgetView.getCurrentPosition() / 1000f) +
+                " / " +
+                videoWidgetView.getDuration() / 1000f +
+                " seconds.";
+        statusText.setText(status);
     }
 }
