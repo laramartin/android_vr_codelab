@@ -68,7 +68,28 @@ public class GorillaFragment extends Fragment {
         // Add the restore state code here.
 
         // Add the seekbar listener here.
+        // initialize the seekbar listener
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
+                // if the user changed the position, seek to the new position.
+                if (fromUser) {
+                    videoWidgetView.seekTo(progress);
+                    updateStatusText();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // ignore for now.
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // ignore for now.
+            }
+        });
         // Add the VrVideoView listener here
 
         return view;
