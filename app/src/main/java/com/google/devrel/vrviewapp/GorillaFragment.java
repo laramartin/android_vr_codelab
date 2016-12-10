@@ -219,7 +219,7 @@ public class GorillaFragment extends Fragment {
         if (isVisibleToUser) {
             try {
                 if (videoWidgetView.getDuration() <= 0) {
-                    videoWidgetView.loadVideoFromAsset("congo_2048.mp4");
+                    videoWidgetView.loadVideoFromAsset("congo_2048.mp4", null);
                 }
             } catch (Exception e) {
                 Toast.makeText(getActivity(), "Error opening video: " + e.getMessage(), Toast.LENGTH_LONG)
