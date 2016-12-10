@@ -212,4 +212,25 @@ public class GorillaFragment extends Fragment {
         super.onDestroy();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            try {
+                if (videoWidgetView.getDuration() <= 0) {
+                    videoWidgetView.loadVideoFromAsset("congo_2048.mp4");
+                }
+            } catch (Exception e) {
+                Toast.makeText(getActivity(), "Error opening video: " + e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        } else {
+            isPaused = true;
+            if (videoWidgetView != null) {
+                videoWidgetView.pauseVideo();
+            }
+        }
+    }
+
 }
