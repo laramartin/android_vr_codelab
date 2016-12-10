@@ -21,13 +21,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.vr.sdk.widgets.pano.VrPanoramaView;
+
 /**
  * Fragment for handling the Welcome tab.
  */
 public class WelcomeFragment extends Fragment {
+
+    private VrPanoramaView panoWidgetView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.welcome_fragment, container,false);
+        View v =  inflater.inflate(R.layout.welcome_fragment, container,false);
+        panoWidgetView = (VrPanoramaView) v.findViewById(R.id.pano_view);
+        return v;
+    }
+
+    @Override
+    public void onPause() {
+        panoWidgetView.pauseRendering();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        panoWidgetView.resumeRendering();
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        // Destroy the widget and free memory.
+        panoWidgetView.shutdown();
+        super.onDestroy();
     }
 }
