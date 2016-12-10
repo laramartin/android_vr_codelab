@@ -24,6 +24,7 @@ public class ImageLoaderTask extends AsyncTask<AssetManager, Void, Bitmap> {
     private final VrPanoramaView.Options viewOptions;
     private static WeakReference<Bitmap> lastBitmap = new WeakReference<>(null);
     private static String lastName;
+    private ImageLoaderTask backgroundImageLoaderTask;
 
     @Override
     protected Bitmap doInBackground(AssetManager... params) {
@@ -57,4 +58,6 @@ public class ImageLoaderTask extends AsyncTask<AssetManager, Void, Bitmap> {
             vw.loadImageFromBitmap(bitmap, viewOptions);
         }
     }
+
+
 }
