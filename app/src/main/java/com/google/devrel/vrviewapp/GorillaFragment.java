@@ -71,6 +71,20 @@ public class GorillaFragment extends Fragment {
         videoWidgetView = (VrVideoView) view.findViewById(R.id.video_view);
 
         // Add the restore state code here.
+        // initialize based on the saved state
+        if (savedInstanceState != null) {
+            long progressTime = savedInstanceState.getLong(STATE_PROGRESS_TIME);
+            videoWidgetView.seekTo(progressTime);
+            seekBar.setMax((int)savedInstanceState.getLong(STATE_VIDEO_DURATION));
+            seekBar.setProgress((int) progressTime);
+
+            isPaused = savedInstanceState.getBoolean(STATE_IS_PAUSED);
+            if (isPaused) {
+                videoWidgetView.pauseVideo();
+            }
+        } else {
+            seekBar.setEnabled(false);
+        }
 
         // Add the seekbar listener here.
         // initialize the seekbar listener
@@ -95,6 +109,7 @@ public class GorillaFragment extends Fragment {
                 // ignore for now.
             }
         });
+
         // Add the VrVideoView listener here
         // initialize the video listener
         videoWidgetView.setEventListener(new VrVideoEventListener() {
@@ -162,4 +177,14 @@ public class GorillaFragment extends Fragment {
                 " seconds.";
         statusText.setText(status);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putLong(STATE_PROGRESS_TIME, videoWidgetView.getCurrentPosition());
+        savedInstanceState.putLong(STATE_VIDEO_DURATION, videoWidgetView.getDuration());
+        savedInstanceState.putBoolean(STATE_IS_PAUSED, isPaused);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
 }
