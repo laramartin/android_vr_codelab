@@ -17,12 +17,15 @@ package com.google.devrel.vrviewapp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.vr.sdk.widgets.video.VrVideoEventListener;
 import com.google.vr.sdk.widgets.video.VrVideoView;
 
 /**
@@ -91,6 +94,60 @@ public class GorillaFragment extends Fragment {
             }
         });
         // Add the VrVideoView listener here
+        // initialize the video listener
+        videoWidgetView.setEventListener(new VrVideoEventListener() {
+            /**
+             * Called by video widget on the UI thread when it's done loading the video.
+             */
+            @Override
+            public void onLoadSuccess() {
+                Log.i(TAG, "Successfully loaded video " + videoWidgetView.getDuration());
+                seekBar.setMax((int) videoWidgetView.getDuration());
+                seekBar.setEnabled(true);
+                updateStatusText();
+            }
+
+            /**
+             * Called by video widget on the UI thread on any asynchronous error.
+             */
+            @Override
+            public void onLoadError(String errorMessage) {
+                Toast.makeText(
+                        getActivity(), "Error loading video: " + errorMessage, Toast.LENGTH_LONG)
+                        .show();
+                Log.e(TAG, "Error loading video: " + errorMessage);
+            }
+
+            @Override
+            public void onClick() {
+                if (isPaused) {
+                    videoWidgetView.playVideo();
+                } else {
+                    videoWidgetView.pauseVideo();
+                }
+
+                isPaused = !isPaused;
+                updateStatusText();
+            }
+
+            /**
+             * Update the UI every frame.
+             */
+            @Override
+            public void onNewFrame() {
+                updateStatusText();
+                seekBar.setProgress((int) videoWidgetView.getCurrentPosition());
+            }
+
+            /**
+             * Make the video play in a loop. This method could also be used to move to the next video in
+             * a playlist.
+             */
+            @Override
+            public void onCompletion() {
+                videoWidgetView.seekTo(0);
+            }
+        });
 
         return view;
     }
